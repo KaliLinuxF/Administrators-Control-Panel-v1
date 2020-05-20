@@ -52,6 +52,7 @@ function onFormPush() {
 	// formating new row
 	newRow.setBackground("white");
 	newRow.setFontWeight("normal");
+	newRow.setBorder(true,true,true,true,true,true,"black", null)
 
     sheet.getRange(3, 1).setValue(newAdminInfo.get("name"));
     sheet.getRange(3, 2).setValue(newAdminInfo.get("role"));
