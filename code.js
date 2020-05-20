@@ -2,6 +2,7 @@
 // admSheet - Таблица текущих администраторов проекта
 let formSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("form");
 let admSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("adm");
+let spadmSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("spadm");
 
 // Последняя строка таблицы формы и таблицы администрации
 let formLastRow = formSheet.getLastRow();
@@ -36,20 +37,28 @@ function onFormPush() {
   newAdminInfo.set("url", formInfoRange[0][3]);
 
   if(!hasAdmin(newAdminInfo.get("nick"))) {
-    admSheet.insertRowAfter(2);
+	  
+	let sheet = admSheet;
+	// fucking shiet code, i will rewrite this
+	// if administrator is spectator he going to spectators sheet, else going to administrators sheet
+	if(newAdminInfo.get("role") != "Администратор") {
+		sheet = spadmSheet;
+	}
 
-	let newRow = admSheet.getRange(3, 1, 1, 6);
+    sheet.insertRowAfter(2);
+
+	let newRow = sheet.getRange(3, 1, 1, 6);
 
 	// formating new row
 	newRow.setBackground("white");
 	newRow.setFontWeight("normal");
 
-    admSheet.getRange(3, 1).setValue(newAdminInfo.get("name"));
-    admSheet.getRange(3, 2).setValue(newAdminInfo.get("role"));
-    admSheet.getRange(3, 3).setValue(newAdminInfo.get("nick"));
-    admSheet.getRange(3, 4).setValue(newAdminInfo.get("url"));
-    admSheet.getRange(3, 5).setValue("0/3 ⚠️");
-	admSheet.getRange(3, 6).setValue("0/3 ❌");
+    sheet.getRange(3, 1).setValue(newAdminInfo.get("name"));
+    sheet.getRange(3, 2).setValue(newAdminInfo.get("role"));
+    sheet.getRange(3, 3).setValue(newAdminInfo.get("nick"));
+    sheet.getRange(3, 4).setValue(newAdminInfo.get("url"));
+    sheet.getRange(3, 5).setValue("0/3 ⚠️");
+	sheet.getRange(3, 6).setValue("0/3 ❌");
 	
 	showAlert(`Администратор${newAdminInfo.get("nick")} добавлен.`);
 
