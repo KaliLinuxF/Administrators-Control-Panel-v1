@@ -7,11 +7,19 @@ let admSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("adm");
 let formLastRow = formSheet.getLastRow();
 let admLastRow = admSheet.getLastRow();
 
+// Открытие "Settings"
+function onSettingsOpen() {
+	let htmlOutput =  HtmlService.createHtmlOutputFromFile("settings.html").setTitle("Settings");
+	let ui = SpreadsheetApp.getUi();
+	ui.showSidebar(htmlOutput);
+}
+
 //Вызывается при открытии таблицы
 function onOpen(e) {
   SpreadsheetApp.getUi()
       .createAddonMenu()
-      .addItem("Открыть", "onControlPanelOpen")
+	  .addItem("Open", "onControlPanelOpen")
+	  .addItem("Settings", "onSettingsOpen")
       .addToUi();
 }
 
@@ -28,12 +36,20 @@ function onFormPush() {
   newAdminInfo.set("url", formInfoRange[0][3]);
 
   if(!hasAdmin(newAdminInfo.get("nick"))) {
-    admSheet.insertRowAfter(1);
-    
-    admSheet.getRange(2, 1).setValue(newAdminInfo.get("name"));
-    admSheet.getRange(2, 2).setValue(newAdminInfo.get("role"));
-    admSheet.getRange(2, 3).setValue(newAdminInfo.get("nick"));
-    admSheet.getRange(2, 4).setValue(newAdminInfo.get("url"));
+    admSheet.insertRowAfter(2);
+
+	let newRow = admSheet.getRange(3, 1, 1, 6);
+
+	// formating new row
+	newRow.setBackground("white");
+	newRow.setFontWeight("normal");
+
+    admSheet.getRange(3, 1).setValue(newAdminInfo.get("name"));
+    admSheet.getRange(3, 2).setValue(newAdminInfo.get("role"));
+    admSheet.getRange(3, 3).setValue(newAdminInfo.get("nick"));
+    admSheet.getRange(3, 4).setValue(newAdminInfo.get("url"));
+    admSheet.getRange(3, 5).setValue("0/3 ⚠️");
+    admSheet.getRange(3, 6).setValue("0/3 ❌");
   } else {
     Logger.log(`Администратор ${newAdminInfo.get("nick")} уже есть в таблице.`);
   }
