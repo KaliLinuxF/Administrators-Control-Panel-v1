@@ -49,9 +49,13 @@ function onFormPush() {
     admSheet.getRange(3, 3).setValue(newAdminInfo.get("nick"));
     admSheet.getRange(3, 4).setValue(newAdminInfo.get("url"));
     admSheet.getRange(3, 5).setValue("0/3 ⚠️");
-    admSheet.getRange(3, 6).setValue("0/3 ❌");
+	admSheet.getRange(3, 6).setValue("0/3 ❌");
+	
+	showAlert(`Администратор${newAdminInfo.get("nick")} добавлен.`);
+
   } else {
-    Logger.log(`Администратор ${newAdminInfo.get("nick")} уже есть в таблице.`);
+	  Logger.log(`Администратор ${newAdminInfo.get("nick")} уже есть в таблице.`);
+	  showAlert(`Администратор ${newAdminInfo.get("nick")} уже есть в таблице.`)
   }
 }
 
@@ -174,6 +178,7 @@ function setWarn(admin) {
     return;
   }
 
+
   return admin;
 }
 
@@ -183,8 +188,9 @@ function include(filename){
   .getContent();
 }
 
-
-
+function showAlert(msg) {
+	Browser.msgBox(msg);
+}
 
 
 
