@@ -95,7 +95,7 @@ function onControlPanelOpen() {
 
 // Возвращает информацию об администраторе
 function getAdminsInfo() {
-  return admSheet.getRange(2, 1, admLastRow - 4, 6).getValues();
+  return admSheet.getRange(3, 1, admLastRow - 4, 6).getValues();
 }
 
 // Снимает администратора

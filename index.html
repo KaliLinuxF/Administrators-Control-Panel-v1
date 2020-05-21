@@ -7,18 +7,20 @@
   
 
   </head>
-  <body>
+  <body onload="callServerGetAdmins()">
    
-    <h1>Управление Администрацией</h1>
-    <form name="findForm">
-      <input class="inputText" type="text" id="txtInput">
-      <input class="inputButton" type="button" name="inputButton" value="Поиск" onclick="callServerFindAdmin()">
-    </form>
+	<h1>Управление Администрацией</h1>
 
-    <p id="hasAdminAlert"></p>
-       
-   
-      <table id="adminInfoTable">
+
+	<form name="admForm">
+		<select name="admList" onchange="callServerSelectAdmin()">
+			<option>Не выбрано</option>
+		</select>
+	</form>
+
+
+    <p id="hasAdminAlert"></p>  
+      <table id="adminInfoTable" onchange="">
         <tr>
           <th>Имя Фамилия</th>
           <th>Должность</th>

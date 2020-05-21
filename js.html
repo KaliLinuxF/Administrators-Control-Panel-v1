@@ -1,26 +1,45 @@
 <script>
-	let textInput = document.getElementById('txtInput');
 	let table = document.getElementById('adminInfoTable'); // Таблица отображения
 	let info = table.rows[1].cells; // Ячейки второго ряда
 	let alertMsg = document.getElementById('hasAdminAlert');
 	let buttonsDiv = document.getElementById('buttons');
+	let admSelect = admForm.admList;
 
-	function callServerFindAdmin() {
-	  google.script.run.withSuccessHandler(successFindAdmin).getAdminsInfo();
+	function callServerGetAdmins() {
+		google.script.run.withSuccessHandler(successGetAdmins).getAdminsInfo();
 	}
 
-	function successFindAdmin(admins) {
+	function successGetAdmins(admins) {
+		for (let i = 0; i < admins.length; i++) {
+			for (let j = 0; j < admins[i].length; j++) {
+				if(j == 2) {
+					let text = admins[i][j];
+					let value = "index" + i;
+
+					admSelect.options[admSelect.options.length] = new Option(text,value);
+				}
+			}
+		}
+	}
+
+	function callServerSelectAdmin() {
+	  google.script.run.withSuccessHandler(successSelectAdmin).getAdminsInfo();
+	}
+
+	function successSelectAdmin(admins) {
 	  
 	  let hasAdmin = false;
-	  let admin = textInput.value;
+	  let admin = admSelect.options[admSelect.selectedIndex].text;
 	  let index = 0;
 
 	  for(let i = 0; i < admins.length; i++) {
 		for(let j = 0; j < admins[i].length; j++) {
-		  if(admins[i][j] == admin) {
-			index = i;
-			hasAdmin = true;
-		  }
+			if(j == 2) {
+				if(admins[i][j] == admin) {
+					index = i;
+					hasAdmin = true;
+				}
+			}
 		}
 	  }
 
@@ -51,7 +70,7 @@
 	}
 
 	function callServerRemoveAdmin() {
-	  google.script.run.withSuccessHandler(onSuccessRemoveAdmin).removeAdmin(textInput.value);
+	  google.script.run.withSuccessHandler(onSuccessRemoveAdmin).removeAdmin(admSelect.options[admSelect.selectedIndex].text);
 	}
 
 	function onSuccessRemoveAdmin(admin) {
@@ -61,10 +80,14 @@
 	  alertMsg.style.color = "orange";
 	  alertMsg.innerHTML = `[⚠️] Администратор ${admin} был снят.`;
 
+	  // Удаление из списка
+	  let selectedIndex = admSelect.options.selectedIndex;
+	  admSelect.options[selectedIndex] = null;
+
 	}
 
 	function callServerSetPred() {
-	  google.script.run.withSuccessHandler(onSuccessSetPred).setPred(textInput.value);
+	  google.script.run.withSuccessHandler(onSuccessSetPred).setPred(admSelect.options[admSelect.selectedIndex].text);
 	}
 
 	function onSuccessSetPred(admin) {
@@ -75,7 +98,7 @@
 	}
 	
 	function callServerSetWarn() {
-	  google.script.run.withSuccessHandler(onSuccessSetWarn).setWarn(textInput.value);
+	  google.script.run.withSuccessHandler(onSuccessSetWarn).setWarn(admSelect.options[admSelect.selectedIndex].text);
 	}
 
 	function onSuccessSetWarn(admin) {
